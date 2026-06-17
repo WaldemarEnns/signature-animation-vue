@@ -1,3 +1,4 @@
-// Public entry. The component is added in a later task; keep a typed placeholder so
-// the demo and library entry resolve.
-export const name = 'signature-animation-vue'
+import SignatureAnimation from './SignatureAnimation.vue'
+
+export { SignatureAnimation }
+export default SignatureAnimation

@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { name } from '../src/index'
+import { SignatureAnimation } from '../src/index'
 </script>
 
 <template>
-  <main>{{ name }}</main>
+  <main>
+    <SignatureAnimation>Hello</SignatureAnimation>
+  </main>
 </template>
