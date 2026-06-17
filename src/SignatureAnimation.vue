@@ -69,20 +69,22 @@ const prefersReduced = (): boolean =>
 async function run(): Promise<void> {
   const token = ++runToken
   await nextTick()
+  if (token !== runToken) return // superseded during nextTick
   reset()
   const ps = allPaths()
   if (prefersReduced()) {
     for (const p of ps) p.style.strokeDashoffset = '0'
-    emit('done')
+    if (token === runToken) emit('done')
     return
   }
   void root.value?.offsetWidth // flush "transition: none" before enabling it
-  for (const p of ps) {
+  for (let i = 0; i < ps.length; i++) {
     if (token !== runToken) return // a newer run cancelled this one
+    const p = ps[i]
     p.style.transition = `stroke-dashoffset ${props.duration}s ease-in-out`
     p.style.strokeDashoffset = '0'
     await sleep(props.duration * 1000)
-    if (props.delay > 0) await sleep(props.delay * 1000)
+    if (props.delay > 0 && i < ps.length - 1) await sleep(props.delay * 1000)
   }
   if (token === runToken) emit('done')
 }
