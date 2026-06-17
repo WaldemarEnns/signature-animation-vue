@@ -1,0 +1,49 @@
+{
+  "name": "signature-animation-vue",
+  "version": "0.1.0",
+  "description": "A Vue 3 component that animates text as if it is being handwritten.",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build --config vite.lib.config.ts",
+    "build:demo": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "generate:glyphs": "node scripts/generate-glyphs.mjs"
+  },
+  "keywords": [
+    "vue",
+    "animation",
+    "signature",
+    "handwriting",
+    "svg",
+    "stroke"
+  ],
+  "peerDependencies": {
+    "vue": "^3.5.38"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^29.1.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16",
+    "vite-plugin-dts": "^5.0.2",
+    "vitest": "^4.1.9",
+    "vue-tsc": "^3.3.5"
+  }
+}
