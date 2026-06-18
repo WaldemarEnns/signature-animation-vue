@@ -15,6 +15,16 @@ const sig = ref<{ replay: () => void } | null>(null)
 function replay() {
   sig.value?.replay()
 }
+
+let doneTimer: ReturnType<typeof setTimeout> | null = null
+
+function onDone() {
+  if (doneTimer) clearTimeout(doneTimer)
+  doneVisible.value = true
+  doneTimer = setTimeout(() => {
+    doneVisible.value = false
+  }, 800)
+}
 </script>
 
 <template>
@@ -50,7 +60,7 @@ function replay() {
           :color="color"
           :stroke-width="strokeWidth"
           :autoplay="autoplay"
-          @done="doneVisible = false"
+          @done="onDone"
         >{{ text }}</SignatureAnimation>
       </div>
 
