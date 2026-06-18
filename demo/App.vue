@@ -1,96 +1,84 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { SignatureAnimation } from '../src/index'
-
-const text = ref('Make AY shine')
-const duration = ref(1)
-const delay = ref(0.2)
-const color = ref('#111111')
-
-const sig = ref<{ replay: () => void } | null>(null)
-function replay() {
-  sig.value?.replay()
-}
 </script>
 
 <template>
-  <main class="wrap">
-    <h1>signature-animation-vue</h1>
-
-    <section class="stage">
-      <SignatureAnimation
-        ref="sig"
-        :duration="duration"
-        :delay="delay"
-        :color="color"
-      >{{ text }}</SignatureAnimation>
+  <div class="page">
+    <!-- HERO -->
+    <section class="hero">
+      <span class="pkg-name">signature-animation-vue</span>
+      <div class="hero-stage">
+        <SignatureAnimation :duration="1.2" :delay="0.3">
+          Hello World
+        </SignatureAnimation>
+      </div>
+      <p class="tagline">A Vue 3 component that draws text as handwritten SVG strokes.</p>
+      <div class="hero-links">
+        <a href="https://www.npmjs.com/package/signature-animation-vue" target="_blank" rel="noopener">
+          <img src="https://img.shields.io/npm/v/signature-animation-vue" alt="npm version" />
+        </a>
+        <a class="gh-link" href="https://github.com/WaldemarEnns/signature-animation-vue" target="_blank" rel="noopener">
+          GitHub →
+        </a>
+      </div>
     </section>
 
-    <section class="controls">
-      <label>Text<input v-model="text" type="text" /></label>
-      <label>
-        Duration: {{ duration }}s
-        <input v-model.number="duration" type="range" min="0.2" max="3" step="0.1" />
-      </label>
-      <label>
-        Delay: {{ delay }}s
-        <input v-model.number="delay" type="range" min="0" max="1" step="0.05" />
-      </label>
-      <label>Color<input v-model="color" type="color" /></label>
-      <button type="button" @click="replay">Replay</button>
-    </section>
-  </main>
+    <!-- PLAYGROUND stub -->
+    <section class="playground"></section>
+
+    <!-- INSTALL stub -->
+    <section class="install"></section>
+  </div>
 </template>
 
 <style scoped>
-.wrap {
+.page {
   max-width: 720px;
-  margin: 8vh auto;
+  margin: 8vh auto 80px;
   padding: 0 24px;
   font-family: ui-sans-serif, system-ui, sans-serif;
   color: #111;
 }
-h1 {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #888;
+
+/* Hero */
+.hero {
+  margin-bottom: 72px;
 }
-.stage {
-  min-height: 120px;
+.pkg-name {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 24px;
+}
+.hero-stage {
+  min-height: 80px;
   display: flex;
   align-items: center;
-  padding: 24px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 12px;
-  margin: 16px 0 28px;
+  margin-bottom: 20px;
 }
-.controls {
-  display: grid;
-  gap: 14px;
-  max-width: 360px;
-}
-.controls label {
-  display: grid;
-  gap: 6px;
-  font-size: 13px;
+.tagline {
+  font-size: 15px;
   color: #555;
+  margin: 0 0 16px;
 }
-.controls input[type='text'] {
-  padding: 8px 10px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  font-size: 14px;
+.hero-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
-.controls button {
-  justify-self: start;
-  padding: 8px 18px;
-  border: none;
-  border-radius: 999px;
-  background: #111;
-  color: #fff;
+.hero-links img {
+  display: block;
+}
+.gh-link {
   font-size: 13px;
-  cursor: pointer;
+  color: #111;
+  text-decoration: none;
+  font-weight: 500;
+}
+.gh-link:hover {
+  text-decoration: underline;
 }
 </style>
