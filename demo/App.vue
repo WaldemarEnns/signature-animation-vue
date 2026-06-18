@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { SignatureAnimation } from '../src/index'
 
 // Playground state
@@ -26,6 +26,11 @@ function onDone() {
   }, 800)
 }
 
+onUnmounted(() => {
+  if (doneTimer) clearTimeout(doneTimer)
+  if (copyTimer) clearTimeout(copyTimer)
+})
+
 // Copy state and handler
 const copiedIndex = ref<number | null>(null)
 let copyTimer: ReturnType<typeof setTimeout> | null = null
@@ -43,8 +48,12 @@ import { SignatureAnimation } from 'signature-animation-vue'
 </template>`,
 ]
 
-function copy(index: number) {
-  navigator.clipboard.writeText(snippets[index])
+async function copy(index: number) {
+  try {
+    await navigator.clipboard.writeText(snippets[index])
+  } catch {
+    return
+  }
   if (copyTimer) clearTimeout(copyTimer)
   copiedIndex.value = index
   copyTimer = setTimeout(() => {
@@ -98,7 +107,7 @@ function copy(index: number) {
 
         <label class="ctrl">
           <span class="ctrl-label">Duration <span class="ctrl-value">{{ duration }}s</span></span>
-          <input v-model.number="duration" type="range" min="0.1" max="3" step="0.1" />
+          <input v-model.number="duration" type="range" min="0.2" max="3" step="0.1" />
         </label>
 
         <label class="ctrl">
@@ -129,7 +138,7 @@ function copy(index: number) {
               <span class="toggle-thumb" />
             </button>
           </label>
-          <button v-if="!autoplay" type="button" class="btn-replay" @click="replay">
+          <button type="button" class="btn-replay" @click="replay">
             Replay
           </button>
           <span v-if="doneVisible" class="done-pill">✓ done</span>
@@ -336,6 +345,7 @@ function copy(index: number) {
   color: #e5e5e5;
   border-radius: 10px;
   padding: 16px 20px;
+  padding-right: 72px;
   font-size: 13px;
   font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
   line-height: 1.6;
