@@ -1,5 +1,20 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { SignatureAnimation } from '../src/index'
+
+// Playground state
+const text = ref('Make it shine')
+const duration = ref(1)
+const delay = ref(0.2)
+const color = ref('#111111')
+const strokeWidth = ref(1)
+const autoplay = ref(true)
+const doneVisible = ref(false) // wired in Task 3
+
+const sig = ref<{ replay: () => void } | null>(null)
+function replay() {
+  sig.value?.replay()
+}
 </script>
 
 <template>
@@ -23,8 +38,68 @@ import { SignatureAnimation } from '../src/index'
       </div>
     </section>
 
-    <!-- PLAYGROUND stub -->
-    <section class="playground"></section>
+    <!-- PLAYGROUND -->
+    <section class="playground">
+      <h2 class="section-title">Playground</h2>
+
+      <div class="stage">
+        <SignatureAnimation
+          ref="sig"
+          :duration="duration"
+          :delay="delay"
+          :color="color"
+          :stroke-width="strokeWidth"
+          :autoplay="autoplay"
+          @done="doneVisible = false"
+        >{{ text }}</SignatureAnimation>
+      </div>
+
+      <div class="controls">
+        <label class="ctrl">
+          <span class="ctrl-label">Text</span>
+          <input v-model="text" type="text" class="input-text" />
+        </label>
+
+        <label class="ctrl">
+          <span class="ctrl-label">Duration <span class="ctrl-value">{{ duration }}s</span></span>
+          <input v-model.number="duration" type="range" min="0.1" max="3" step="0.1" />
+        </label>
+
+        <label class="ctrl">
+          <span class="ctrl-label">Delay <span class="ctrl-value">{{ delay }}s</span></span>
+          <input v-model.number="delay" type="range" min="0" max="1" step="0.05" />
+        </label>
+
+        <label class="ctrl">
+          <span class="ctrl-label">Stroke width <span class="ctrl-value">{{ strokeWidth }}</span></span>
+          <input v-model.number="strokeWidth" type="range" min="1" max="4" step="0.5" />
+        </label>
+
+        <label class="ctrl">
+          <span class="ctrl-label">Color</span>
+          <input v-model="color" type="color" class="input-color" />
+        </label>
+
+        <div class="ctrl ctrl-row">
+          <label class="toggle-label">
+            <span class="ctrl-label">Autoplay</span>
+            <button
+              type="button"
+              class="toggle"
+              :class="{ on: autoplay }"
+              :aria-pressed="autoplay"
+              @click="autoplay = !autoplay"
+            >
+              <span class="toggle-thumb" />
+            </button>
+          </label>
+          <button v-if="!autoplay" type="button" class="btn-replay" @click="replay">
+            Replay
+          </button>
+          <span v-if="doneVisible" class="done-pill">✓ done</span>
+        </div>
+      </div>
+    </section>
 
     <!-- INSTALL stub -->
     <section class="install"></section>
@@ -80,5 +155,120 @@ import { SignatureAnimation } from '../src/index'
 }
 .gh-link:hover {
   text-decoration: underline;
+}
+
+/* Playground */
+.playground {
+  margin-bottom: 72px;
+}
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #999;
+  margin: 0 0 16px;
+}
+.stage {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  background: #f8f8f8;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+.controls {
+  display: grid;
+  gap: 16px;
+  max-width: 360px;
+}
+.ctrl {
+  display: grid;
+  gap: 6px;
+}
+.ctrl-label {
+  font-size: 13px;
+  color: #555;
+  display: flex;
+  justify-content: space-between;
+}
+.ctrl-value {
+  color: #999;
+  font-variant-numeric: tabular-nums;
+}
+.input-text {
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.input-color {
+  width: 40px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.toggle {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  border: none;
+  background: #ddd;
+  cursor: pointer;
+  transition: background 0.2s;
+  padding: 0;
+  flex-shrink: 0;
+}
+.toggle.on {
+  background: #111;
+}
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+.toggle.on .toggle-thumb {
+  transform: translateX(16px);
+}
+.btn-replay {
+  padding: 6px 14px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.btn-replay:hover {
+  background: #f5f5f5;
+}
+.done-pill {
+  font-size: 12px;
+  color: #fff;
+  background: #22c55e;
+  padding: 3px 10px;
+  border-radius: 999px;
 }
 </style>
