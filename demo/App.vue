@@ -25,6 +25,32 @@ function onDone() {
     doneVisible.value = false
   }, 800)
 }
+
+// Copy state and handler
+const copiedIndex = ref<number | null>(null)
+let copyTimer: ReturnType<typeof setTimeout> | null = null
+
+const snippets = [
+  `npm install signature-animation-vue`,
+  `<script setup>
+import { SignatureAnimation } from 'signature-animation-vue'
+<\/script>
+
+<template>
+  <SignatureAnimation :duration="1" :delay="0.3">
+    Hello World
+  </SignatureAnimation>
+</template>`,
+]
+
+function copy(index: number) {
+  navigator.clipboard.writeText(snippets[index])
+  if (copyTimer) clearTimeout(copyTimer)
+  copiedIndex.value = index
+  copyTimer = setTimeout(() => {
+    copiedIndex.value = null
+  }, 1500)
+}
 </script>
 
 <template>
@@ -111,8 +137,23 @@ function onDone() {
       </div>
     </section>
 
-    <!-- INSTALL stub -->
-    <section class="install"></section>
+    <!-- INSTALL & USAGE -->
+    <section class="install">
+      <h2 class="section-title">Install &amp; Usage</h2>
+
+      <div v-for="(snippet, i) in snippets" :key="i" class="code-block">
+        <pre class="code-pre">{{ snippet }}</pre>
+        <button type="button" class="copy-btn" @click="copy(i)">
+          {{ copiedIndex === i ? 'Copied!' : 'Copy' }}
+        </button>
+      </div>
+
+      <footer class="footer">
+        <a href="https://github.com/WaldemarEnns/signature-animation-vue" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-sep">·</span>
+        <a href="https://www.npmjs.com/package/signature-animation-vue" target="_blank" rel="noopener">npm</a>
+      </footer>
+    </section>
   </div>
 </template>
 
@@ -280,5 +321,63 @@ function onDone() {
   background: #22c55e;
   padding: 3px 10px;
   border-radius: 999px;
+}
+
+/* Install & Usage */
+.install {
+  margin-bottom: 80px;
+}
+.code-block {
+  position: relative;
+  margin-bottom: 16px;
+}
+.code-pre {
+  background: #1a1a1a;
+  color: #e5e5e5;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13px;
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', monospace;
+  line-height: 1.6;
+  margin: 0;
+  overflow-x: auto;
+  white-space: pre;
+}
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #ccc;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #999;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.footer a {
+  color: #555;
+  text-decoration: none;
+}
+.footer a:hover {
+  text-decoration: underline;
+}
+.footer-sep {
+  color: #ddd;
 }
 </style>
